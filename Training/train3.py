@@ -87,7 +87,7 @@ scheduler = get_cosine_schedule_with_warmup(
     num_cycles=0.5
 )
 
-criterion = nn.CrossEntropyLoss(ignore_index=tokenizer.pad_token_id, label_smoothing=LABEL_SMOOTHING)
+criterion = nn.CrossEntropyLoss(ignore_index=-100, label_smoothing=LABEL_SMOOTHING)
 
 results_file = f"model_evolution/training_dates.csv"
 if os.path.exists(results_file):
@@ -105,8 +105,8 @@ for epoch in range(START_EPOCH, START_EPOCH + NUM_EPOCHS):
     start_time = time.time()
 
     for batch in tqdm(train_loader, desc=f"Training epoch {epoch + 1}", ncols=100):
-        optimizer.zero_grad()
-        input_ids = batch["input_ids"].to(device)
+        optimizer.zero_grad()    
+        input_ids = batch["input_ids"].to(device)  
         attention_mask = batch["attention_mask"].to(device)
         labels = batch["labels"].to(device)
 
